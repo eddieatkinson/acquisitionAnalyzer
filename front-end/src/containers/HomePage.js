@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Route, Link} from 'react-router-dom';
-import { Row, Col, Table } from 'react-materialize';
+import { Row, Col, Table, Button } from 'react-materialize';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import GetTargetsAction from '../actions/GetTargetsAction';
@@ -26,7 +26,7 @@ class HomePage extends Component{
 		return(
 			<div>
 				<Row>
-					<h5>Companies of Interest</h5>
+					<h5>Companies of Interest<Link to='/addCompany'><Button>Add Company</Button></Link></h5>
 					<Col s={8}>
 						<Table>
 							<thead>
