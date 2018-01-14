@@ -90,9 +90,9 @@ router.post('/login', (req, res)=>{
 
 router.post('/addCompany', (req, res)=>{
 	console.log(req.body);
-	res.json(req.body);
+	// res.json(req.body);
 	const companyInterested = req.body.companyInterested;
-	const targetCompany = req.body.targetCompany;
+	const targetCompany = req.body.targetCompanyName;
 	const contactFirstName = req.body.contactFirstName;
 	const contactLastName = req.body.contactLastName;
 	const contactEmail = req.body.contactEmail;
@@ -121,7 +121,7 @@ router.post('/addCompany', (req, res)=>{
 						if(error){
 							throw error;
 						}else{
-							
+
 							res.json({
 								msg: 'targetInfoAdded'
 							});
@@ -168,7 +168,6 @@ router.post('/addCompany', (req, res)=>{
 });
 
 router.get('/targets/:companyName/get', (req, res, next)=>{
-	console.log("You made it, bro!")
 	const companyName = req.params.companyName;
 	const selectQuery = `SELECT * FROM targets
 		INNER JOIN users ON users.company = targets.companyInterested

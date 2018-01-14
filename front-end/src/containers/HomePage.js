@@ -16,7 +16,19 @@ class HomePage extends Component{
 		}
 	}
 
+	componentWillReceiveProps(newProps){
+		const same = (newProps.targetsAdded === this.props.targetsAdded);
+		if(!same){
+			console.log('Props should be changed here')
+			this.props.getTargets(newProps.auth.company);
+		}
+	}
+
 	render(){
+		if(this.props.auth.token === undefined){
+			this.props.history.push('/login');
+		}
+		console.log('rendering homepage');
 		var targetData = this.props.targets.map((target, index)=>{
 			return (<tr key={index}>
 				<Link to={`/homePage/${target.id}`}><td>{target.name}</td></Link>
@@ -53,7 +65,8 @@ class HomePage extends Component{
 function mapStateToProps(state){
 	return{
 		auth: state.auth,
-		targets: state.targets
+		targets: state.targets,
+		targetsAdded: state.targetsAdded
 	}
 }
 function mapDispatchToProps(dispatch){

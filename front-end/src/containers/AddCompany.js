@@ -45,7 +45,15 @@ class AddCompany extends Component{
 			expenses,
 			netIncome
 		}
-		this.props.addCompanyAction(formData);
+		console.log(formData);
+		const addCompanyPromise = new Promise((resolve, reject)=>{
+			this.props.addCompanyAction(formData);
+			resolve("Resolved!");
+		});
+		addCompanyPromise.then((value)=>{
+			console.log(value);
+			this.props.history.push('/');
+		});
 	}
 
 	handleRevenuesChange(event){
@@ -104,7 +112,8 @@ class AddCompany extends Component{
 
 function mapStateToProps(state){
 	return{
-		auth: state.auth
+		auth: state.auth,
+		targetsAdded: state.targetsAdded
 	}
 }
 function mapDispatchToProps(dispatch){

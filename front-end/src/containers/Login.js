@@ -25,7 +25,7 @@ class Login extends Component{
 			});
 		}else{
 			console.log("componentWillReceiveProps");
-			newProps.history.push('/homePage');	
+			newProps.history.push('/');	
 		}
 	}
 

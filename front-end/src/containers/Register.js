@@ -19,7 +19,7 @@ class Register extends Component{
 				error: 'An account with that email already exists.'
 			});
 		}else{
-			newProps.history.push('/homePage');	
+			newProps.history.push('/');	
 		}
 	}
 
