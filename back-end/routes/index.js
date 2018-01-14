@@ -100,9 +100,37 @@ router.post('/addCompany', (req, res)=>{
 	const revenues = req.body.revenues;
 	const expenses = req.body.expenses;
 	const netIncome = req.body.netIncome;
-	const insertContactQuery = `INSERT INTO targets (name, companyInterested, revenues, expenses, netIncome)
+	const insertTarget = `INSERT INTO targets (name, companyInterested, revenues, expenses, netIncome)
 		VALUES
 		(?, ?, ?, ?, ?);`;
+	connection.query(insertTarget, [targetCompany, companyInterested, revenues, expenses, netIncome], (error)=>{
+		if(error){
+			throw error;
+		}else{
+			const targetIdQuery = `SELECT * FROM targets
+										WHERE name = ?;`;
+			connection.query(targetIdQuery, [targetCompany], (error, results)=>{
+				if(error){
+					throw error;
+				}else{
+					const targetId = results[0].id;
+					const insertContact = `INSERT INTO targetContacts (targetId, contactFirstName, contactLastName, contactPhone, contactEmail)
+						VALUES
+						(?, ?, ?, ?, ?);`;
+					connection.query(insertContact, [targetId, contactFirstName, contactLastName, contactPhone, contactEmail], (error)=>{
+						if(error){
+							throw error;
+						}else{
+							
+							res.json({
+								msg: 'targetInfoAdded'
+							});
+						}
+					});
+				}
+			});
+		}
+	});
 	// const email = req.body.email;
 	// const password = req.body.password;
 	// const checkEmailQuery = `SELECT * FROM users
