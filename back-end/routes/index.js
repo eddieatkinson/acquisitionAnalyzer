@@ -91,6 +91,16 @@ router.post('/login', (req, res)=>{
 router.post('/addCompany', (req, res)=>{
 	console.log(req.body);
 	res.json(req.body);
+	const companyInterested = req.body.companyInterested;
+	const targetCompany = req.body.targetCompany;
+	const companyInterested = req.body.companyInterested;
+	const contactFirstName = req.body.contactFirstName;
+	const contactLastName = req.body.contactLastName;
+	const contactEmail = req.body.contactEmail;
+	const contactPhone = req.body.contactPhone;
+	const revenues = req.body.revenues;
+	const expenses = req.body.expenses;
+	const netIncome = req.body.netIncome;
 	// const email = req.body.email;
 	// const password = req.body.password;
 	// const checkEmailQuery = `SELECT * FROM users
