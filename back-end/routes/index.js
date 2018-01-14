@@ -88,6 +88,45 @@ router.post('/login', (req, res)=>{
 	});
 });
 
+router.post('/addCompany', (req, res)=>{
+	console.log(req.body);
+	res.json(req.body);
+	// const email = req.body.email;
+	// const password = req.body.password;
+	// const checkEmailQuery = `SELECT * FROM users
+	// 	WHERE email = ?;`;
+	// connection.query(checkEmailQuery, [email], (error, results)=>{
+	// 	if(error){
+	// 		throw error;
+	// 	}else{
+	// 		if(results.length === 0){
+	// 			res.json({
+	// 				msg: 'noEmailExists'
+	// 			});
+	// 		}else{
+	// 			const checkHash = bcrypt.compareSync(password, results[0].password);
+	// 			const company = results[0].company;
+	// 			const firstName = results[0].firstName;
+	// 			const lastName = results[0].firstName;
+	// 			if(checkHash){
+	// 				const token = randToken.uid(60);
+	// 				res.json({
+	// 					token,
+	// 					email,
+	// 					firstName,
+	// 					lastName,
+	// 					company
+	// 				});
+	// 			}else{
+	// 				res.json({
+	// 					msg: 'badPass'
+	// 				});
+	// 			}
+	// 		}
+	// 	}
+	// });
+});
+
 router.get('/targets/:companyName/get', (req, res, next)=>{
 	console.log("You made it, bro!")
 	const companyName = req.params.companyName;

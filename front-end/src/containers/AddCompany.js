@@ -3,32 +3,67 @@ import { Link } from 'react-router-dom';
 import { Row, Input, Button } from 'react-materialize';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import LoginAction from '../actions/LoginAction';
+import AddCompanyAction from '../actions/AddCompanyAction';
 
 class AddCompany extends Component{
 	constructor(){
 		super();
 		this.state = {
-			error: ' '
+			error: ' ',
+			revenues: 0,
+			expenses: 0,
+			netIncome: 0
 		}
 		this.handleSubmit = this.handleSubmit.bind(this);
+		this.handleRevenuesChange = this.handleRevenuesChange.bind(this);
+		this.handleExpensesChange = this.handleExpensesChange.bind(this);
 	}
 
 	componentWillReceiveProps(newProps){
 	}
 
 	handleSubmit(event){
+		console.log(this.props.auth);
 		event.preventDefault();
+		var companyInterested = this.props.auth.company;
+		var targetCompanyName = document.getElementById('companyName').value;
+		var contactFirstName = document.getElementById('contactFirstName').value;
+		var contactLastName = document.getElementById('contactLastName').value;
+		var contactPhone = document.getElementById('contactPhone').value;
+		var contactEmail = document.getElementById('contactEmail').value;
+		var revenues = document.getElementById('revenues').value;
+		var expenses = document.getElementById('expenses').value;
+		var netIncome = document.getElementById('netIncome').value;
+		var formData = {
+			companyInterested,
+			targetCompanyName,
+			contactFirstName,
+			contactLastName,
+			contactPhone,
+			contactEmail,
+			revenues,
+			expenses,
+			netIncome
+		}
+		this.props.addCompanyAction(formData);
 	}
 
 	handleRevenuesChange(event){
 		var revenues = event.target.value;
-		console.log(revenues);
+		// console.log(revenues);
+		this.setState({
+			revenues: revenues,
+			netIncome: revenues - this.state.expenses
+		});
 	}
 
 	handleExpensesChange(event){
 		var expenses = event.target.value;
-		console.log(expenses);
+		// console.log(expenses);
+		this.setState({
+			expenses: expenses,
+			netIncome: this.state.revenues - expenses
+		});
 	}
 
 	render(){
@@ -55,13 +90,12 @@ class AddCompany extends Component{
 						<Input id='expenses' onChange={this.handleExpensesChange} s={6} label='Expenses' required />
 					</Row>
 					<Row>
-						<Input id='netIncome' s={6} label='Net Income' required />
+						<Input id='netIncome' s={6} label='Net Income' value={this.state.netIncome} required />
 					</Row>
 					<Row>
 						<Button onClick={this.handleSubmit}>Add Company</Button>
 					</Row>
 				</form>
-					<p>Not registered? Click <Link to='/register'>here</Link> to register!</p>
 			</div>
 		)
 	}
@@ -75,7 +109,7 @@ function mapStateToProps(state){
 }
 function mapDispatchToProps(dispatch){
 	return bindActionCreators({
-		loginAction: LoginAction
+		addCompanyAction: AddCompanyAction
 	},dispatch);
 }
 
