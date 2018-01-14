@@ -25,7 +25,6 @@ class Register extends Component{
 
 	handleSubmit(event){
 		event.preventDefault();
-		console.log("user tried to register");
 		const firstName = document.getElementById('firstName').value;
 		const lastName = document.getElementById('lastName').value;
 		const company = document.getElementById('companyName').value;

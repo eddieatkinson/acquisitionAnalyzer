@@ -19,7 +19,6 @@ class HomePage extends Component{
 	componentWillReceiveProps(newProps){
 		const same = (newProps.targetsAdded === this.props.targetsAdded);
 		if(!same){
-			console.log('Props should be changed here')
 			this.props.getTargets(newProps.auth.company);
 		}
 	}
@@ -28,10 +27,9 @@ class HomePage extends Component{
 		if(this.props.auth.token === undefined){
 			this.props.history.push('/login');
 		}
-		console.log('rendering homepage');
 		var targetData = this.props.targets.map((target, index)=>{
 			return (<tr key={index}>
-				<Link to={`/homePage/${target.id}`}><td>{target.name}</td></Link>
+				<Link to={`/info/${target.targetsId}`}><td>{target.name}</td></Link>
 				<td>{target.status}</td>
 			</tr>)
 		});
@@ -53,7 +51,7 @@ class HomePage extends Component{
 						</Table>
 					</Col>
 					<Col s={4}>
-						<Route path='/homePage/:targetId' component={TargetInfo} />
+						<Route path='/info/:targetId' component={TargetInfo} />
 					</Col>
 				</Row>
 			</div>

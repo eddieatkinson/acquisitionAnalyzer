@@ -11,7 +11,6 @@ connection.connect();
 var randToken = require('rand-token');
 
 router.post('/register', (req, res)=>{
-	// console.log(req.body);
 	const company = req.body.company;
 	const email = req.body.email;
 	const firstName = req.body.firstName;
@@ -51,7 +50,6 @@ router.post('/register', (req, res)=>{
 });
 
 router.post('/login', (req, res)=>{
-	// console.log(req.body);
 	const email = req.body.email;
 	const password = req.body.password;
 	const checkEmailQuery = `SELECT * FROM users
@@ -89,8 +87,6 @@ router.post('/login', (req, res)=>{
 });
 
 router.post('/addCompany', (req, res)=>{
-	console.log(req.body);
-	// res.json(req.body);
 	const companyInterested = req.body.companyInterested;
 	const targetCompany = req.body.targetCompanyName;
 	const contactFirstName = req.body.contactFirstName;
@@ -131,45 +127,11 @@ router.post('/addCompany', (req, res)=>{
 			});
 		}
 	});
-	// const email = req.body.email;
-	// const password = req.body.password;
-	// const checkEmailQuery = `SELECT * FROM users
-	// 	WHERE email = ?;`;
-	// connection.query(checkEmailQuery, [email], (error, results)=>{
-	// 	if(error){
-	// 		throw error;
-	// 	}else{
-	// 		if(results.length === 0){
-	// 			res.json({
-	// 				msg: 'noEmailExists'
-	// 			});
-	// 		}else{
-	// 			const checkHash = bcrypt.compareSync(password, results[0].password);
-	// 			const company = results[0].company;
-	// 			const firstName = results[0].firstName;
-	// 			const lastName = results[0].firstName;
-	// 			if(checkHash){
-	// 				const token = randToken.uid(60);
-	// 				res.json({
-	// 					token,
-	// 					email,
-	// 					firstName,
-	// 					lastName,
-	// 					company
-	// 				});
-	// 			}else{
-	// 				res.json({
-	// 					msg: 'badPass'
-	// 				});
-	// 			}
-	// 		}
-	// 	}
-	// });
 });
 
 router.get('/targets/:companyName/get', (req, res, next)=>{
 	const companyName = req.params.companyName;
-	const selectQuery = `SELECT * FROM targets
+	const selectQuery = `SELECT *, targets.id AS targetsId FROM targets
 		INNER JOIN users ON users.company = targets.companyInterested
 		WHERE users.company = ?;`;
 	connection.query(selectQuery, [companyName], (error, results)=>{
@@ -177,6 +139,20 @@ router.get('/targets/:companyName/get', (req, res, next)=>{
 			throw error
 		}else{
 			res.json(results);
+		}
+	});
+});
+
+router.get('/targetInfo/:targetId/get', (req, res, next)=>{
+	const targetId = req.params.targetId;
+	const selectQuery = `SELECT * FROM targets
+		INNER JOIN targetContacts ON targetContacts.targetId = targets.id
+		WHERE targets.id = ?;`;
+	connection.query(selectQuery, [targetId], (error, results)=>{
+		if(error){
+			throw error
+		}else{
+			res.json(results[0]);
 		}
 	});
 });
