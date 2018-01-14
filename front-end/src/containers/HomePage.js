@@ -29,8 +29,10 @@ class HomePage extends Component{
 		}
 		var targetData = this.props.targets.map((target, index)=>{
 			return (<tr key={index}>
-				<Link to={`/info/${target.targetsId}`}><td>{target.name}</td></Link>
+				<Link to={`/info/${target.targetsId}/view`}><td>{target.name}</td></Link>
 				<td>{target.status}</td>
+				<td><Link to={`/info/${target.targetsId}/edit`}><Button>Edit</Button></Link></td>
+				<td><Link to={`/info/${target.targetsId}/delete`}><Button>Delete</Button></Link></td>
 			</tr>)
 		});
 		return(
@@ -43,6 +45,8 @@ class HomePage extends Component{
 								<tr>
 									<th>Company Name</th>
 									<th>Status</th>
+									<th>Edit</th>
+									<th>Delete</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -51,7 +55,7 @@ class HomePage extends Component{
 						</Table>
 					</Col>
 					<Col s={4}>
-						<Route path='/info/:targetId' component={TargetInfo} />
+						<Route path='/info/:targetId/:action' component={TargetInfo} />
 					</Col>
 				</Row>
 			</div>
