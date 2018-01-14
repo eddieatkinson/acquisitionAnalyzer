@@ -93,7 +93,6 @@ router.post('/addCompany', (req, res)=>{
 	res.json(req.body);
 	const companyInterested = req.body.companyInterested;
 	const targetCompany = req.body.targetCompany;
-	const companyInterested = req.body.companyInterested;
 	const contactFirstName = req.body.contactFirstName;
 	const contactLastName = req.body.contactLastName;
 	const contactEmail = req.body.contactEmail;
@@ -101,6 +100,9 @@ router.post('/addCompany', (req, res)=>{
 	const revenues = req.body.revenues;
 	const expenses = req.body.expenses;
 	const netIncome = req.body.netIncome;
+	const insertContactQuery = `INSERT INTO targets (name, companyInterested, revenues, expenses, netIncome)
+		VALUES
+		(?, ?, ?, ?, ?);`;
 	// const email = req.body.email;
 	// const password = req.body.password;
 	// const checkEmailQuery = `SELECT * FROM users
