@@ -1,11 +1,34 @@
 import React, { Component } from 'react';
 import { Route, Link} from 'react-router-dom';
-import { Row, Col, Table, Input } from 'react-materialize';
+import { Row, Col, Table, Input, Button } from 'react-materialize';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import GetTargetInfo from '../actions/GetTargetInfo';
 
 class TargetInfo extends Component{
+
+	handleSubmit(event){
+		event.preventDefault();
+		const newName = document.getElementById('changeCompanyName').value;
+		const newContactFirstName = document.getElementById('changeContactFirstName').value;
+		const newContactLastName = document.getElementById('changeContactLastName').value;
+		const newContactEmail = document.getElementById('changeContactEmail').value;
+		const newContactPhone = document.getElementById('changeContactPhone').value;
+		const newRevenues = document.getElementById('changeRevenues').value;
+		const newExpenses = document.getElementById('changeExpenses').value;
+		const newNetIncome = document.getElementById('changeNetIncome').value;
+		const formData = {
+			newName,
+			newContactFirstName,
+			newContactLastName,
+			newContactEmail,
+			newContactPhone,
+			newRevenues,
+			newExpenses,
+			newNetIncome
+		}
+		console.log(formData);
+	}
 
 	componentWillReceiveProps(newProps){
 		const same = (newProps.match.params.targetId === this.props.match.params.targetId);
@@ -22,30 +45,36 @@ class TargetInfo extends Component{
 
 	render(){
 		var targetInfo = this.props.targetInfo;
-		var targetNameInput, contactNameInput, contactEmailInput, contactPhoneInput, revenuesInput, expensesInput, netIncomeInput, submitButton;
-		targetNameInput = contactNameInput = contactEmailInput = contactPhoneInput = revenuesInput = expensesInput = netIncomeInput = submitButton = '';
+		var targetNameInput, contactFirstNameInput, contactLastNameInput, contactEmailInput, contactPhoneInput, revenuesInput, expensesInput, netIncomeInput, submitButton;
+		targetNameInput = contactFirstNameInput = contactLastNameInput = contactEmailInput = contactPhoneInput = revenuesInput = expensesInput = netIncomeInput = submitButton = '';
 		if(this.props.match.params.action === 'edit'){
 			targetNameInput = (
 				<td><Input id='changeCompanyName' label='Change Company Name' /></td>
-				);
-			contactNameInput = (
-				<td><Input id='changeContactName' label='Change Contact Name' /></td>
-				);
+			);
+			contactFirstNameInput = (
+				<td><Input id='changeContactFirstName' label='Change Contact First Name' /></td>
+			);
+			contactLastNameInput = (
+				<td><Input id='changeContactLastName' label='Change Contact Last Name' /></td>
+			);
 			contactEmailInput = (
 				<td><Input id='changeContactEmail' label='Change Contact Email' /></td>
-				);
+			);
 			contactPhoneInput = (
 				<td><Input id='changeContactPhone' label='Change Contact Phone' /></td>
-				);
+			);
 			revenuesInput = (
 				<td><Input id='changeRevenues' label='Change Revenues' /></td>
-				);
+			);
 			expensesInput = (
 				<td><Input id='changeExpenses' label='Change Expenses' /></td>
-				);
+			);
 			netIncomeInput = (
 				<td><Input id='changeNetIncome' label='Change Net Income' /></td>
-				);
+			);
+			submitButton = (
+				<Button onClick={this.handleSubmit}>Submit Changes</Button>
+			);
 		}
 		return(
 			<form>
@@ -58,7 +87,7 @@ class TargetInfo extends Component{
 					<tr>
 						<th>Contact Name:</th>
 						<td>{`${targetInfo.contactFirstName} ${targetInfo.contactLastName}`}</td>
-						{contactNameInput}
+						{contactFirstNameInput}{contactLastNameInput}
 					</tr>
 					<tr>
 						<th>Contact Email:</th>
