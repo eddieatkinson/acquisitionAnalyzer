@@ -110,7 +110,7 @@ class TargetInfo extends Component{
 		if(this.props.match.params.action === 'edit'){
 			console.log(targetInfo);
 			return(
-				<div>
+				<div className='target-info-edit'>
 					<h6 className='errorMessage'>{this.state.error}</h6>
 					<form>
 						<Table>
@@ -157,7 +157,7 @@ class TargetInfo extends Component{
 		}else{
 			console.log(targetInfo);
 			return(
-				<div>
+				<div className='target-info'>
 					<form>
 						<Table>
 							<tr>
