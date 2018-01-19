@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { Row, Input, Button } from 'react-materialize';
+import { Row, Col, Input, Button } from 'react-materialize';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import AddCompanyAction from '../actions/AddCompanyAction';
@@ -27,7 +27,13 @@ class AddCompany extends Component{
 	handleSearch(event){
 		event.preventDefault();
 		const tickerSymbol = document.getElementById('tickerSymbol').value.toUpperCase();
-		this.props.searchTicker(tickerSymbol);
+		if(tickerSymbol === ''){
+			this.setState({
+				error: 'You cannot search an empty ticker.'
+			});
+		}else{
+			this.props.searchTicker(tickerSymbol);
+		}
 	}
 
 	handleSubmit(event){
@@ -91,27 +97,36 @@ class AddCompany extends Component{
 	componentWillReceiveProps(newProps){
 		var resultsFromSearch = newProps.searchResults;
 		console.log(resultsFromSearch);
-		// console.log(resultsFromSearch[0]);
-		if(resultsFromSearch[0] !== undefined){
-			var totalRevenue, totalExpenses, income;
-			console.log("HERE!");
-			function getValues(item, index){
-				for(let key in resultsFromSearch[index]){
-					if(resultsFromSearch[index].tag === 'totalrevenue'){
-						totalRevenue = resultsFromSearch[index].value;
-					}else if(resultsFromSearch[index].tag === 'netincome'){
-						income = resultsFromSearch[index].value;
+		if(resultsFromSearch.msg === 'noResults'){
+			this.setState({
+				error: 'There are no results for that ticker.'
+			});
+		}else{
+			// console.log(resultsFromSearch[0]);
+			if(resultsFromSearch[0] !== undefined){
+				var totalRevenue, totalExpenses, income;
+				console.log("HERE!");
+				function getValues(item, index){
+					for(let key in resultsFromSearch[index]){
+						if(resultsFromSearch[index].tag === 'totalrevenue'){
+							totalRevenue = resultsFromSearch[index].value;
+						}else if(resultsFromSearch[index].tag === 'netincome'){
+							income = resultsFromSearch[index].value;
+						}
 					}
 				}
+				resultsFromSearch.forEach(getValues);
+				totalExpenses = totalRevenue - income;
+				this.setState({
+					revenues: totalRevenue,
+					expenses: totalExpenses,
+					netIncome: income,
+					error: ''
+				});
+				console.log(`totalRevenue = ${totalRevenue}`);
+				console.log(`totalExpenses = ${totalExpenses}`);
+				console.log(`netIncome = ${income}`);
 			}
-			resultsFromSearch.forEach(getValues);
-			totalExpenses = totalRevenue - income;
-			this.state.revenues = totalRevenue;
-			this.state.expenses = totalExpenses;
-			this.state.netIncome = income;
-			console.log(`totalRevenue = ${totalRevenue}`);
-			console.log(`totalExpenses = ${totalExpenses}`);
-			console.log(`netIncome = ${income}`);
 		}
 	}
 
@@ -122,37 +137,41 @@ class AddCompany extends Component{
 		}
 		return(
 			<div>
-				<h5>Add Company</h5>
-				<form>
-					<Input id='tickerSymbol' label='Stock Ticker Symbol' />
-					<Button onClick={this.handleSearch}>Search</Button>
-				</form>
-				<h6 className='errorMessage'>{this.state.error}</h6>
-				<form>
-					<Row>
-						<Input id='companyName' s={6} label='Company Name' validate required />
-					</Row>
-					<Row>
-						<Input id='contactFirstName' s={3} label='Contact First Name' required />
-						<Input id='contactLastName' s={3} label='Contact Last Name' required />
-					</Row>
-					<Row>
-						<Input id='contactPhone' s={3} label='Contact Phone Number' required />
-						<Input id='contactEmail' s={3} label='Contact Email' type='email' validate required />
-					</Row>
-					<Row>
-						<Input id='revenues' onChange={this.handleRevenuesChange} s={6} label='Revenues' value={accounting.formatMoney(this.state.revenues)} required />
-					</Row>
-					<Row>
-						<Input id='expenses' onChange={this.handleExpensesChange} s={6} label='Expenses' value={accounting.formatMoney(this.state.expenses)} required />
-					</Row>
-					<Row>
-						<Input id='netIncome' s={6} label='Net Income' value={accounting.formatMoney(this.state.netIncome)} required />
-					</Row>
-					<Row>
-						<Button onClick={this.handleSubmit}>Add Company</Button>
-					</Row>
-				</form>
+				<Row>
+					<Col s={6} className='offset-s3'>
+						<h5>Add Company</h5>
+						<form>
+							<Input id='tickerSymbol' label='Stock Ticker Symbol' />
+							<Button onClick={this.handleSearch}>Search</Button>
+						</form>
+						<h6 className='errorMessage'>{this.state.error}</h6>
+						<form>
+							<Row>
+								<Input id='companyName' s={12} label='Company Name' validate required />
+							</Row>
+							<Row>
+								<Input id='contactFirstName' s={6} label='Contact First Name' required />
+								<Input id='contactLastName' s={6} label='Contact Last Name' required />
+							</Row>
+							<Row>
+								<Input id='contactPhone' s={6} label='Contact Phone Number' required />
+								<Input id='contactEmail' s={6} label='Contact Email' type='email' validate required />
+							</Row>
+							<Row>
+								<Input id='revenues' onChange={this.handleRevenuesChange} s={12} label='Revenues' value={accounting.formatMoney(this.state.revenues)} required />
+							</Row>
+							<Row>
+								<Input id='expenses' onChange={this.handleExpensesChange} s={12} label='Expenses' value={accounting.formatMoney(this.state.expenses)} required />
+							</Row>
+							<Row>
+								<Input id='netIncome' s={12} label='Net Income' value={accounting.formatMoney(this.state.netIncome)} required />
+							</Row>
+							<Row>
+								<Button onClick={this.handleSubmit}>Add Company</Button>
+							</Row>
+						</form>
+					</Col>
+				</Row>
 			</div>
 		)
 	}

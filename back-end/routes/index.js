@@ -325,7 +325,14 @@ router.get('/searchTicker/:tickerSymbol/get', (req, res, next)=>{
 		// console.log(response);
 		var parsedCompanyData = JSON.parse(companyData);
 		console.log(parsedCompanyData.data);
-		res.json(parsedCompanyData.data);
+		if(parsedCompanyData.data[0] === undefined){
+			console.log("NO RESULTS");
+			res.json({
+				msg: 'noResults'
+			});
+		}else{
+			res.json(parsedCompanyData.data);
+		}
 	});
 });
 

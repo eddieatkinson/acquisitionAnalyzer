@@ -95,7 +95,7 @@ class HomePage extends Component{
 			buttons = 
 			<Col s={6} className={classNameOffset}>
 			<div>
-				<Button onClick={this.showActive}>Active Targets</Button>
+				<Button className='top-buttons' onClick={this.showActive}>Active Targets</Button>
 				<h5>Companies Deleted</h5>
 			</div>
 			</Col>
@@ -103,8 +103,8 @@ class HomePage extends Component{
 			buttons = 
 			<Col s={6} className={classNameOffset}>
 			<div>
-				<Link to='/addCompany'><Button>Add Company</Button></Link>
-				<Button onClick={this.showDeleted}>Deleted Targets</Button>
+				<Link to='/addCompany'><Button className='top-buttons'>Add Company</Button></Link>
+				<Button className='top-buttons' onClick={this.showDeleted}>Deleted Targets</Button>
 				<h5>Companies of Interest</h5>
 			</div>
 			</Col>
