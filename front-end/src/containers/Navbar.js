@@ -26,7 +26,7 @@ class Login extends Component{
 			<div>
 				<nav>
 					<div className='nav-wrapper container'>
-						<Link to='/' className='brand-logo center'><img style={{height: '50px'}} src='dollar_sign.png' /></Link>
+						<Link to='/' className='brand-logo center'>Aquisition Analyzer</Link>
 						{navLinks}
 					</div>
 				</nav>

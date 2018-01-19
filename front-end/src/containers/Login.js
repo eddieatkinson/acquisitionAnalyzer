@@ -64,10 +64,10 @@ class Login extends Component{
 				<h6 className='errorMessage'>{this.state.error}</h6>
 				<form>
 					<Row>
-						<Input id='email' s={6} label='Email' type='email' validate required />
+						<Input id='email' s={12} label='Email' type='email' validate required />
 					</Row>
 					<Row>
-						<Input id='password' s={6} label='Password' type='password' required />
+						<Input id='password' s={12} label='Password' type='password' required />
 					</Row>
 					<Row>
 						<Button onClick={this.handleSubmit}>Login</Button>

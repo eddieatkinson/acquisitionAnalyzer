@@ -66,20 +66,20 @@ class Register extends Component{
 				<h6 className='errorMessage'>{this.state.error}</h6>
 				<form>
 					<Row>
-						<Input id='firstName' s={3} label='First Name' required />
-						<Input id='lastName' s={3} label='Last Name' required />
+						<Input id='firstName' s={6} label='First Name' required />
+						<Input id='lastName' s={6} label='Last Name' required />
 					</Row>
 					<Row>
-						<Input id='companyName' s={6} label='Company Name' required />
+						<Input id='companyName' s={12} label='Company Name' required />
 					</Row>
 					<Row>
-						<Input id='email' s={6} label='Email' type='email' validate required />
+						<Input id='email' s={12} label='Email' type='email' validate required />
 					</Row>
 					<Row>
-						<Input id='password' s={6} label='Password' type='password' required />
+						<Input id='password' s={12} label='Password' type='password' required />
 					</Row>
 					<Row>
-						<Input id='passwordConfirm' s={6} label='Confirm Password' type='password' required />
+						<Input id='passwordConfirm' s={12} label='Confirm Password' type='password' required />
 					</Row>
 					<Row>
 						<Button onClick={this.handleSubmit}>Register</Button>

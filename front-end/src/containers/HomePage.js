@@ -8,6 +8,8 @@ import GetTargetsAction from '../actions/GetTargetsAction';
 import DeleteTargetAction from '../actions/DeleteTargetAction';
 import ReactivateTargetAction from '../actions/ReactivateTargetAction';
 import DisplayDeletedAction from '../actions/DisplayDeletedAction';
+import AddOffsetAction from '../actions/AddOffsetAction';
+import RemoveOffsetAction from '../actions/RemoveOffsetAction';
 import TargetInfo from './TargetInfo';
 
 class HomePage extends Component{
@@ -31,6 +33,12 @@ class HomePage extends Component{
 	}
 
 	componentWillReceiveProps(newProps){
+		console.log(this.props.match);
+		if(this.props.match.path === '/'){
+			this.props.addOffset();
+		}else if(this.props.match.path === '/info'){
+			this.props.removeOffset();
+		}
 		const same = (newProps.targetsAdded === this.props.targetsAdded);
 		if(!same){
 			this.props.getTargets(newProps.auth.company);
@@ -64,24 +72,42 @@ class HomePage extends Component{
 		});
 	}
 
+	// handleClassChange(){
+	// 	console.log('Class should be changed');
+	// 	this.setState({
+	// 		classNameOffset: 'none'
+	// 	});
+	// 	console.log(this.state.classNameOffset);
+	// }
+
 	render(){
+		var classNameOffset;
+		if(this.props.colOffset){
+			classNameOffset = 'offset-s3';
+		}else{
+			classNameOffset = '';
+		}
 		if(this.props.auth.token === undefined){
 			this.props.history.push('/login');
 		}
 		var buttons, editButton, deleteButton;
 		if(this.state.deletedList){
 			buttons = 
+			<Col s={6} className={classNameOffset}>
 			<div>
 				<Button onClick={this.showActive}>Active Targets</Button>
 				<h5>Companies Deleted</h5>
 			</div>
+			</Col>
 		}else{
 			buttons = 
+			<Col s={6} className={classNameOffset}>
 			<div>
 				<Link to='/addCompany'><Button>Add Company</Button></Link>
 				<Button onClick={this.showDeleted}>Deleted Targets</Button>
 				<h5>Companies of Interest</h5>
 			</div>
+			</Col>
 		}
 		var targetData = this.props.targets.map((target, index)=>{
 			if(this.state.deletedList){
@@ -96,7 +122,7 @@ class HomePage extends Component{
 					<Link to={`/info/${target.targetsId}/view`}><td>{target.name}</td></Link>
 					<td>{accounting.formatMoney(target.netIncome)}</td>
 					<td className={target.status}>{target.status}</td>
-					<td><Link to={`/info/${target.targetsId}/edit`}><Button>Edit</Button></Link></td>
+					<td><Link to={`/info/${target.targetsId}/edit`}><Button onClick={this.props.removeOffset}>Edit</Button></Link></td>
 					<td><Button className='red' onClick={this.handleDelete} id={target.targetsId}>Delete</Button></td>
 				</tr>)
 			}
@@ -105,7 +131,9 @@ class HomePage extends Component{
 			<div>
 				<Row>
 					{buttons}
-					<Col s={6}>
+				</Row>
+				<Row>
+					<Col s={6} className={classNameOffset}>
 						<Table>
 							<thead>
 								<tr>
@@ -133,7 +161,8 @@ function mapStateToProps(state){
 	return{
 		auth: state.auth,
 		targets: state.targets,
-		targetsAdded: state.targetsAdded
+		targetsAdded: state.targetsAdded,
+		colOffset: state.colOffset
 	}
 }
 function mapDispatchToProps(dispatch){
@@ -141,7 +170,9 @@ function mapDispatchToProps(dispatch){
 		getTargets: GetTargetsAction,
 		deleteTarget: DeleteTargetAction,
 		reactivateTarget: ReactivateTargetAction,
-		displayDeleted: DisplayDeletedAction
+		displayDeleted: DisplayDeletedAction,
+		addOffset: AddOffsetAction,
+		removeOffset: RemoveOffsetAction
 	},dispatch);
 }
 
