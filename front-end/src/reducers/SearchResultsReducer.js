@@ -1,7 +1,6 @@
 export default function(state = [], action){
 	switch(action.type){
-		case "GET_TARGETS_ACTION":
-		case "DELETE_TARGET_ACTION":
+		case "SEARCH_TICKER":
 			return action.payload.data;
 		default:
 			return state;

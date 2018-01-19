@@ -15,6 +15,7 @@ class Login extends Component{
 	}
 
 	componentWillReceiveProps(newProps){
+		console.log(newProps);
 		if(newProps.auth.msg === 'noEmailExists'){
 			this.setState({
 				error: 'No account for that email exists.'

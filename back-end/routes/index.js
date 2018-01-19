@@ -2,8 +2,10 @@ var express = require('express');
 var router = express.Router();
 var config = require('../config/config.js');
 var mysql = require('mysql');
+var request = require('request');
 var randToken = require('rand-token');
 var bcrypt = require('bcrypt-nodejs');
+var https = require('https');
 
 var connection = mysql.createConnection(config);
 connection.connect();
@@ -45,6 +47,42 @@ router.post('/register', (req, res)=>{
 					}
 				});
 			}
+		}
+	});
+});
+
+router.post('/updateProfile', (req, res)=>{
+	const oldCompany = req.body.oldCompanyName
+	const token = req.body.token;
+	const oldEmail = req.body.oldEmail;
+	const company = req.body.companyName;
+	const email = req.body.email;
+	const firstName = req.body.firstName;
+	const lastName = req.body.lastName;
+	const hash = bcrypt.hashSync(req.body.password);
+	const updateUser = `UPDATE users
+		SET company = ?, email = ?, firstName = ?, lastName = ?
+		WHERE email = ?;`;
+	connection.query(updateUser, [company, email, firstName, lastName, oldEmail], (error)=>{
+		if(error){
+			throw error;
+		}else{
+			const updateCompanyInTargets = `UPDATE targets
+				SET companyInterested = ?
+				WHERE companyInterested = ?;`;
+			connection.query(updateCompanyInTargets, [company, oldCompany], (error)=>{
+				if(error){
+					throw error;
+				}else{
+					res.json({
+						token,
+						email,
+						firstName,
+						lastName,
+						company
+					});
+				}
+			});
 		}
 	});
 });
@@ -133,12 +171,38 @@ router.get('/targets/:companyName/get', (req, res, next)=>{
 	const companyName = req.params.companyName;
 	const selectQuery = `SELECT *, targets.id AS targetsId FROM targets
 		INNER JOIN users ON users.company = targets.companyInterested
-		WHERE users.company = ?;`;
+		WHERE users.company = ? and targets.deleted = 'false'
+		ORDER BY targetsId desc;`;
 	connection.query(selectQuery, [companyName], (error, results)=>{
 		if(error){
 			throw error
 		}else{
 			res.json(results);
+		}
+	});
+});
+
+router.get('/deleteTarget/:targetId/:companyName/get', (req, res, next)=>{
+	const targetId = req.params.targetId;
+	const companyName = req.params.companyName;
+	const deleteTarget = `UPDATE targets
+		SET deleted = 'true'
+		WHERE id = ?;`;
+	connection.query(deleteTarget, [targetId], (error)=>{
+		if(error){
+			throw error;
+		}else{
+			const selectQuery = `SELECT *, targets.id AS targetsId FROM targets
+				INNER JOIN users ON users.company = targets.companyInterested
+				WHERE users.company = ? and targets.deleted = 'false';`;
+			connection.query(selectQuery, [companyName], (error, results)=>{
+				if(error){
+					throw error
+				}else{
+					console.log(results)
+					res.json(results);
+				}
+			});
 		}
 	});
 });
@@ -155,6 +219,46 @@ router.get('/targetInfo/:targetId/get', (req, res, next)=>{
 			res.json(results[0]);
 		}
 	});
+});
+
+router.get('/searchTicker/:tickerSymbol/get', (req, res, next)=>{
+	var username = "5eae4435c16547d8f72d9b3220e03ba1";
+	var password = "c08c546c4820b32563622d3e809a0e4f";
+	var auth = "Basic " + new Buffer(username + ':' + password).toString('base64');
+	const tickerSymbol = req.params.tickerSymbol;
+	// console.log(auth);
+	// console.log(tickerSymbol);
+	const url = `https://api.intrinio.com/financials/standardized?identifier=${tickerSymbol}&statement=income_statement&fiscal_year=2016&fiscal_period=FY`;
+	request({
+		url: url,
+		headers: {
+			"Authorization": auth
+		}
+	}, (error, response, companyData)=>{
+		// console.log(response);
+		var parsedCompanyData = JSON.parse(companyData);
+		console.log(parsedCompanyData.data);
+		res.json(parsedCompanyData.data);
+	})
+	// var request = https.request({
+	// 	method: "GET",
+	// 	host: "api.intrinio.com",
+	// 	path: `/financials/standardized?identifier=${tickerSymbol}&statement=income_statement&fiscal_year=2016&fiscal_period=FY`,
+	// 	headers: {
+	// 		"Authorization": auth
+	// 	}
+	// }, function(response) {
+	// 	var json = "";
+	// 	response.on('data', function (chunk) {
+	// 		json += chunk;
+	// 	});
+	// 	response.on('end', function() {
+	// 		var company = JSON.parse(json);
+	// 		console.log(company);
+	// 		console.log(company.data);
+	// 	});
+	// });
+	// request.end();
 });
 
 module.exports = router;

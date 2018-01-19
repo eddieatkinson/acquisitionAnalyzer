@@ -3,10 +3,16 @@ import { Route, Link} from 'react-router-dom';
 import { Row, Col, Table, Button } from 'react-materialize';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import accounting from 'accounting';
 import GetTargetsAction from '../actions/GetTargetsAction';
+import DeleteTargetAction from '../actions/DeleteTargetAction';
 import TargetInfo from './TargetInfo';
 
 class HomePage extends Component{
+	constructor(){
+		super();
+		this.handleDelete = this.handleDelete.bind(this);
+	}
 
 	componentDidMount(){
 		if(this.props.auth.token === undefined){
@@ -23,6 +29,12 @@ class HomePage extends Component{
 		}
 	}
 
+	handleDelete(event){
+		var targetId = event.target.id;
+		var companyName = this.props.auth.company
+		this.props.deleteTargetAction(targetId, companyName);
+	}
+
 	render(){
 		if(this.props.auth.token === undefined){
 			this.props.history.push('/login');
@@ -30,20 +42,22 @@ class HomePage extends Component{
 		var targetData = this.props.targets.map((target, index)=>{
 			return (<tr key={index}>
 				<Link to={`/info/${target.targetsId}/view`}><td>{target.name}</td></Link>
-				<td>{target.status}</td>
+				<td>{accounting.formatMoney(target.netIncome)}</td>
+				<td className={target.status}>{target.status}</td>
 				<td><Link to={`/info/${target.targetsId}/edit`}><Button>Edit</Button></Link></td>
-				<td><Link to={`/info/${target.targetsId}/delete`}><Button>Delete</Button></Link></td>
+				<td><Button onClick={this.handleDelete} id={target.targetsId}>Delete</Button></td>
 			</tr>)
 		});
 		return(
 			<div>
 				<Row>
-					<h5>Companies of Interest<Link to='/addCompany'><Button>Add Company</Button></Link></h5>
+					<h5>Companies of Interest<span className='right'><Link to='/addCompany'><Button>Add Company</Button></Link></span></h5>
 					<Col s={8}>
 						<Table>
 							<thead>
 								<tr>
 									<th>Company Name</th>
+									<th>Net Income</th>
 									<th>Status</th>
 									<th>Edit</th>
 									<th>Delete</th>
@@ -73,7 +87,8 @@ function mapStateToProps(state){
 }
 function mapDispatchToProps(dispatch){
 	return bindActionCreators({
-		getTargets: GetTargetsAction
+		getTargets: GetTargetsAction,
+		deleteTargetAction: DeleteTargetAction
 	},dispatch);
 }
 

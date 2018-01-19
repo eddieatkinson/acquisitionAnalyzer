@@ -3,6 +3,7 @@ import { Route, Link} from 'react-router-dom';
 import { Row, Col, Table, Input, Button } from 'react-materialize';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import accounting from 'accounting';
 import GetTargetInfo from '../actions/GetTargetInfo';
 
 class TargetInfo extends Component{
@@ -30,6 +31,10 @@ class TargetInfo extends Component{
 		console.log(formData);
 	}
 
+	handleDelete(){
+
+	}
+
 	componentWillReceiveProps(newProps){
 		const same = (newProps.match.params.targetId === this.props.match.params.targetId);
 		if(!same){
@@ -49,32 +54,34 @@ class TargetInfo extends Component{
 		targetNameInput = contactFirstNameInput = contactLastNameInput = contactEmailInput = contactPhoneInput = revenuesInput = expensesInput = netIncomeInput = submitButton = '';
 		if(this.props.match.params.action === 'edit'){
 			targetNameInput = (
-				<td><Input id='changeCompanyName' label='Change Company Name' /></td>
+				<td><Input id='changeCompanyName' /></td>
 			);
 			contactFirstNameInput = (
-				<td><Input id='changeContactFirstName' label='Change Contact First Name' /></td>
+				<td><Input id='changeContactFirstName' /></td>
 			);
 			contactLastNameInput = (
-				<td><Input id='changeContactLastName' label='Change Contact Last Name' /></td>
+				<td><Input id='changeContactLastName' /></td>
 			);
 			contactEmailInput = (
-				<td><Input id='changeContactEmail' label='Change Contact Email' /></td>
+				<td><Input id='changeContactEmail' /></td>
 			);
 			contactPhoneInput = (
-				<td><Input id='changeContactPhone' label='Change Contact Phone' /></td>
+				<td><Input id='changeContactPhone' /></td>
 			);
 			revenuesInput = (
-				<td><Input id='changeRevenues' label='Change Revenues' /></td>
+				<td><Input id='changeRevenues' /></td>
 			);
 			expensesInput = (
-				<td><Input id='changeExpenses' label='Change Expenses' /></td>
+				<td><Input id='changeExpenses' /></td>
 			);
 			netIncomeInput = (
-				<td><Input id='changeNetIncome' label='Change Net Income' /></td>
+				<td><Input id='changeNetIncome' /></td>
 			);
 			submitButton = (
 				<Button onClick={this.handleSubmit}>Submit Changes</Button>
 			);
+		}else if(this.props.match.params.action === 'delete'){
+			this.handleDelete;
 		}
 		return(
 			<form>
@@ -101,17 +108,17 @@ class TargetInfo extends Component{
 					</tr>
 					<tr>
 						<th>Revenues:</th>
-						<td>{targetInfo.revenues}</td>
+						<td>{accounting.formatMoney(targetInfo.revenues)}</td>
 						{revenuesInput}
 					</tr>
 					<tr>
 						<th>Expenses:</th>
-						<td>{targetInfo.expenses}</td>
+						<td>{accounting.formatMoney(targetInfo.expenses)}</td>
 						{expensesInput}
 					</tr>
 					<tr>
 						<th>Net Income:</th>
-						<td>{targetInfo.netIncome}</td>
+						<td>{accounting.formatMoney(targetInfo.netIncome)}</td>
 						{netIncomeInput}
 					</tr>
 				</Table>
