@@ -77,6 +77,7 @@ class HomePage extends Component{
 		this.setState({
 			deletedList: true
 		});
+		this.props.history.push('/');
 	}
 
 	showActive(){
