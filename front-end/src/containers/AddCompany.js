@@ -54,14 +54,20 @@ class AddCompany extends Component{
 			netIncome
 		}
 		console.log(formData);
-		const addCompanyPromise = new Promise((resolve, reject)=>{
-			this.props.addCompanyAction(formData);
-			resolve("Resolved!");
-		});
-		addCompanyPromise.then((value)=>{
-			console.log(value);
-			this.props.history.push('/');
-		});
+		if(revenues === 0 || expenses === 0){
+			this.setState({
+				error: 'Please enter values for both revenue and expenses.'
+			});
+		}else{
+			const addCompanyPromise = new Promise((resolve, reject)=>{
+				this.props.addCompanyAction(formData);
+				resolve("Resolved!");
+			});
+			addCompanyPromise.then((value)=>{
+				console.log(value);
+				this.props.history.push('/');
+			});
+		}
 	}
 
 	handleRevenuesChange(event){
@@ -121,7 +127,7 @@ class AddCompany extends Component{
 					<Input id='tickerSymbol' label='Stock Ticker Symbol' />
 					<Button onClick={this.handleSearch}>Search</Button>
 				</form>
-				<h6>{this.state.error}</h6>
+				<h6 className='errorMessage'>{this.state.error}</h6>
 				<form>
 					<Row>
 						<Input id='companyName' s={6} label='Company Name' validate required />

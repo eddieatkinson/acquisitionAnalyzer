@@ -6,12 +6,20 @@ import { bindActionCreators } from 'redux';
 import accounting from 'accounting';
 import GetTargetsAction from '../actions/GetTargetsAction';
 import DeleteTargetAction from '../actions/DeleteTargetAction';
+import ReactivateTargetAction from '../actions/ReactivateTargetAction';
+import DisplayDeletedAction from '../actions/DisplayDeletedAction';
 import TargetInfo from './TargetInfo';
 
 class HomePage extends Component{
 	constructor(){
 		super();
+		this.state = {
+			deletedList: false
+		}
 		this.handleDelete = this.handleDelete.bind(this);
+		this.handleReactivate = this.handleReactivate.bind(this);
+		this.showDeleted = this.showDeleted.bind(this);
+		this.showActive = this.showActive.bind(this);
 	}
 
 	componentDidMount(){
@@ -31,36 +39,79 @@ class HomePage extends Component{
 
 	handleDelete(event){
 		var targetId = event.target.id;
-		var companyName = this.props.auth.company
-		this.props.deleteTargetAction(targetId, companyName);
+		var companyName = this.props.auth.company;
+		this.props.deleteTarget(targetId, companyName);
+	}
+
+	handleReactivate(event){
+		var targetId = event.target.id;
+		var companyName = this.props.auth.company;
+		this.props.reactivateTarget(targetId, companyName);
+	}
+
+	showDeleted(){
+		var userCompany = this.props.auth.company;
+		this.props.displayDeleted(userCompany);
+		this.setState({
+			deletedList: true
+		});
+	}
+
+	showActive(){
+		this.props.getTargets(this.props.auth.company);
+		this.setState({
+			deletedList: false
+		});
 	}
 
 	render(){
 		if(this.props.auth.token === undefined){
 			this.props.history.push('/login');
 		}
+		var buttons, editButton, deleteButton;
+		if(this.state.deletedList){
+			buttons = 
+			<div>
+				<Button onClick={this.showActive}>Active Targets</Button>
+				<h5>Companies Deleted</h5>
+			</div>
+		}else{
+			buttons = 
+			<div>
+				<Link to='/addCompany'><Button>Add Company</Button></Link>
+				<Button onClick={this.showDeleted}>Deleted Targets</Button>
+				<h5>Companies of Interest</h5>
+			</div>
+		}
 		var targetData = this.props.targets.map((target, index)=>{
-			return (<tr key={index}>
-				<Link to={`/info/${target.targetsId}/view`}><td>{target.name}</td></Link>
-				<td>{accounting.formatMoney(target.netIncome)}</td>
-				<td className={target.status}>{target.status}</td>
-				<td><Link to={`/info/${target.targetsId}/edit`}><Button>Edit</Button></Link></td>
-				<td><Button onClick={this.handleDelete} id={target.targetsId}>Delete</Button></td>
-			</tr>)
+			if(this.state.deletedList){
+				return (<tr key={index}>
+					<Link to={`/info/${target.targetsId}/view`}><td>{target.name}</td></Link>
+					<td>{accounting.formatMoney(target.netIncome)}</td>
+					<td className={target.status}>{target.status}</td>
+					<td><Button onClick={this.handleReactivate} id={target.targetsId}>Reactivate</Button></td>
+				</tr>)
+			}else{
+				return (<tr key={index}>
+					<Link to={`/info/${target.targetsId}/view`}><td>{target.name}</td></Link>
+					<td>{accounting.formatMoney(target.netIncome)}</td>
+					<td className={target.status}>{target.status}</td>
+					<td><Link to={`/info/${target.targetsId}/edit`}><Button>Edit</Button></Link></td>
+					<td><Button className='red' onClick={this.handleDelete} id={target.targetsId}>Delete</Button></td>
+				</tr>)
+			}
 		});
 		return(
 			<div>
 				<Row>
-					<h5>Companies of Interest<span className='right'><Link to='/addCompany'><Button>Add Company</Button></Link></span></h5>
-					<Col s={8}>
+					{buttons}
+					<Col s={6}>
 						<Table>
 							<thead>
 								<tr>
 									<th>Company Name</th>
 									<th>Net Income</th>
 									<th>Status</th>
-									<th>Edit</th>
-									<th>Delete</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -68,7 +119,7 @@ class HomePage extends Component{
 							</tbody>
 						</Table>
 					</Col>
-					<Col s={4}>
+					<Col s={6}>
 						<Route path='/info/:targetId/:action' component={TargetInfo} />
 					</Col>
 				</Row>
@@ -88,7 +139,9 @@ function mapStateToProps(state){
 function mapDispatchToProps(dispatch){
 	return bindActionCreators({
 		getTargets: GetTargetsAction,
-		deleteTargetAction: DeleteTargetAction
+		deleteTarget: DeleteTargetAction,
+		reactivateTarget: ReactivateTargetAction,
+		displayDeleted: DisplayDeletedAction
 	},dispatch);
 }
 

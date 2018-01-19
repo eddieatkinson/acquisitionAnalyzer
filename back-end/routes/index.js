@@ -87,6 +87,50 @@ router.post('/updateProfile', (req, res)=>{
 	});
 });
 
+router.post('/updateTarget', (req, res)=>{
+	console.log(req.body);
+	const companyInterested = req.body.companyInterested;
+	const targetId = req.body.targetId;
+	const newCompanyName = req.body.newName;
+	const contactFirstName = req.body.newContactFirstName;
+	const contactLastName = req.body.newContactLastNameName;
+	const contactEmail = req.body.newContactEmail;
+	const contactPhone = req.body.newcontactPhone;
+	const revenues = req.body.newRevenues;
+	const expenses = req.body.newExpenses;
+	const netIncome = req.body.newNetIncome;
+	const status = req.body.status;
+	const updateTarget = `UPDATE targets
+		SET name = ?, revenues = ?, expenses = ?, netIncome = ?, status = ?
+		WHERE id = ?;`;
+	connection.query(updateTarget, [newCompanyName, revenues, expenses, netIncome, status, targetId], (error)=>{
+		if(error){
+			throw error;
+		}else{
+			const updateContacts = `UPDATE targetContacts
+				SET contactFirstName = ?, contactLastName = ?, contactPhone = ?, contactEmail = ?
+				WHERE targetId = ?;`;
+			connection.query(updateContacts, [contactFirstName, contactLastName, contactPhone, contactEmail, targetId], (error)=>{
+				if(error){
+					throw error;
+				}else{
+					const selectQuery = `SELECT *, targets.id AS targetsId FROM targets
+						INNER JOIN users ON users.company = targets.companyInterested
+						WHERE users.company = ? and targets.deleted = 'false'
+						ORDER BY targetsId DESC;`;
+					connection.query(selectQuery, [companyInterested], (error, results)=>{
+						if(error){
+							throw error
+						}else{
+							res.json(results);
+						}
+					});
+				}
+			});
+		}
+	});
+});
+
 router.post('/login', (req, res)=>{
 	const email = req.body.email;
 	const password = req.body.password;
@@ -172,7 +216,7 @@ router.get('/targets/:companyName/get', (req, res, next)=>{
 	const selectQuery = `SELECT *, targets.id AS targetsId FROM targets
 		INNER JOIN users ON users.company = targets.companyInterested
 		WHERE users.company = ? and targets.deleted = 'false'
-		ORDER BY targetsId desc;`;
+		ORDER BY targetsId DESC;`;
 	connection.query(selectQuery, [companyName], (error, results)=>{
 		if(error){
 			throw error
@@ -194,7 +238,8 @@ router.get('/deleteTarget/:targetId/:companyName/get', (req, res, next)=>{
 		}else{
 			const selectQuery = `SELECT *, targets.id AS targetsId FROM targets
 				INNER JOIN users ON users.company = targets.companyInterested
-				WHERE users.company = ? and targets.deleted = 'false';`;
+				WHERE users.company = ? and targets.deleted = 'false'
+				ORDER BY targetsId DESC;`;
 			connection.query(selectQuery, [companyName], (error, results)=>{
 				if(error){
 					throw error
@@ -203,6 +248,48 @@ router.get('/deleteTarget/:targetId/:companyName/get', (req, res, next)=>{
 					res.json(results);
 				}
 			});
+		}
+	});
+});
+
+router.get('/reactivateTarget/:targetId/:companyName/get', (req, res, next)=>{
+	const targetId = req.params.targetId;
+	const companyName = req.params.companyName;
+	const reactivateTarget = `UPDATE targets
+		SET deleted = 'false'
+		WHERE id = ?;`;
+	connection.query(reactivateTarget, [targetId], (error)=>{
+		if(error){
+			throw error;
+		}else{
+			const selectQuery = `SELECT *, targets.id AS targetsId FROM targets
+				INNER JOIN users ON users.company = targets.companyInterested
+				WHERE users.company = ? and targets.deleted = 'true'
+				ORDER BY targetsId DESC;`;
+			connection.query(selectQuery, [companyName], (error, results)=>{
+				if(error){
+					throw error
+				}else{
+					console.log(results)
+					res.json(results);
+				}
+			});
+		}
+	});
+});
+
+router.get('/deletedTargets/:companyName/get', (req, res, next)=>{
+	const companyName = req.params.companyName;
+	const selectQuery = `SELECT *, targets.id AS targetsId FROM targets
+		INNER JOIN users ON users.company = targets.companyInterested
+		WHERE users.company = ? and targets.deleted = 'true'
+		ORDER BY targetsId DESC;`;
+	connection.query(selectQuery, [companyName], (error, results)=>{
+		if(error){
+			throw error
+		}else{
+			console.log(results)
+			res.json(results);
 		}
 	});
 });
@@ -239,26 +326,7 @@ router.get('/searchTicker/:tickerSymbol/get', (req, res, next)=>{
 		var parsedCompanyData = JSON.parse(companyData);
 		console.log(parsedCompanyData.data);
 		res.json(parsedCompanyData.data);
-	})
-	// var request = https.request({
-	// 	method: "GET",
-	// 	host: "api.intrinio.com",
-	// 	path: `/financials/standardized?identifier=${tickerSymbol}&statement=income_statement&fiscal_year=2016&fiscal_period=FY`,
-	// 	headers: {
-	// 		"Authorization": auth
-	// 	}
-	// }, function(response) {
-	// 	var json = "";
-	// 	response.on('data', function (chunk) {
-	// 		json += chunk;
-	// 	});
-	// 	response.on('end', function() {
-	// 		var company = JSON.parse(json);
-	// 		console.log(company);
-	// 		console.log(company.data);
-	// 	});
-	// });
-	// request.end();
+	});
 });
 
 module.exports = router;

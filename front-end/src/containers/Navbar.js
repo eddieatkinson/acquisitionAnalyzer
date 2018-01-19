@@ -19,7 +19,7 @@ class Login extends Component{
 			navLinks = <ul>
 							<li><Link to='/'>Targets</Link></li>
 							<li><Link to='/profile'>Profile</Link></li>
-							<li><a href='/'>Logout</a></li>
+							<li className='logout'><a href='/'>Logout</a></li>
 						</ul>
 		}
 		return(

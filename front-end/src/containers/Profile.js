@@ -70,7 +70,7 @@ class HomePage extends Component{
 		var info = this.props.auth;
 		return(
 			<div>
-				<h6>{this.state.error}</h6>
+				<h6 className='errorMessage'>{this.state.error}</h6>
 				<form>
 					<Table>
 						<tr>

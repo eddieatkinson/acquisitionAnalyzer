@@ -61,7 +61,7 @@ class Login extends Component{
 		return(
 			<div>
 				<h5>Login</h5>
-				<h6>{this.state.error}</h6>
+				<h6 className='errorMessage'>{this.state.error}</h6>
 				<form>
 					<Row>
 						<Input id='email' s={6} label='Email' type='email' validate required />

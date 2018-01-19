@@ -63,7 +63,7 @@ class Register extends Component{
 		return(
 			<div id="container">
 				<h5>Register</h5>
-				<h6>{this.state.error}</h6>
+				<h6 className='errorMessage'>{this.state.error}</h6>
 				<form>
 					<Row>
 						<Input id='firstName' s={3} label='First Name' required />

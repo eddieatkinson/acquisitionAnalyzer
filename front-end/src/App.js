@@ -13,12 +13,14 @@ class App extends Component {
 			<Router>
 				<div>
 					<Navbar />
-					<div className='container'>
+					<div className='container-fluid'>
 						<Route exact path='/' component={HomePage} />
 						<Route path='/info' component={HomePage} />
 						<Route path='/profile' component={Profile} />
-						<Route path='/register' component={Register} />
-						<Route path='/login' component={Login} />
+						<div style={{marginLeft: '400px'}}>
+							<Route path='/register' component={Register} />
+							<Route path='/login' component={Login} />
+						</div>
 						<Route path='/addCompany' component={AddCompany} />
 					</div>
 				</div>
