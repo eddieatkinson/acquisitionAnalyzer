@@ -170,6 +170,7 @@ router.post('/login', (req, res)=>{
 });
 
 router.post('/addCompany', (req, res)=>{
+	console.log(req.body);
 	const companyInterested = req.body.companyInterested;
 	const targetCompany = req.body.targetCompanyName;
 	const contactFirstName = req.body.contactFirstName;
@@ -179,10 +180,11 @@ router.post('/addCompany', (req, res)=>{
 	const revenues = req.body.revenues;
 	const expenses = req.body.expenses;
 	const netIncome = req.body.netIncome;
-	const insertTarget = `INSERT INTO targets (name, companyInterested, revenues, expenses, netIncome)
+	const notes = req.body.notes;
+	const insertTarget = `INSERT INTO targets (name, companyInterested, revenues, expenses, netIncome, notes)
 		VALUES
-		(?, ?, ?, ?, ?);`;
-	connection.query(insertTarget, [targetCompany, companyInterested, revenues, expenses, netIncome], (error)=>{
+		(?, ?, ?, ?, ?, ?);`;
+	connection.query(insertTarget, [targetCompany, companyInterested, revenues, expenses, netIncome, notes], (error)=>{
 		if(error){
 			throw error;
 		}else{

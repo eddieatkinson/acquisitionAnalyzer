@@ -48,6 +48,7 @@ class AddCompany extends Component{
 		const revenues = accounting.unformat(document.getElementById('revenues').value);
 		const expenses = accounting.unformat(document.getElementById('expenses').value);
 		const netIncome = accounting.unformat(document.getElementById('netIncome').value);
+		const notes = document.getElementById('notes').value;
 		const formData = {
 			companyInterested,
 			targetCompanyName,
@@ -57,7 +58,8 @@ class AddCompany extends Component{
 			contactEmail,
 			revenues,
 			expenses,
-			netIncome
+			netIncome,
+			notes
 		}
 		console.log(formData);
 		if(revenues === 0 || expenses === 0){
@@ -165,6 +167,9 @@ class AddCompany extends Component{
 							</Row>
 							<Row>
 								<Input id='netIncome' s={12} label='Net Income' value={accounting.formatMoney(this.state.netIncome)} required />
+							</Row>
+							<Row>
+								<textarea id='notes' s={12}></textarea>
 							</Row>
 							<Row>
 								<Button className='cyan lighten-1' onClick={this.handleSubmit}>Add Company</Button>
