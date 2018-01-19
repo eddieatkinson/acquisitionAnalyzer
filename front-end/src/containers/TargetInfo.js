@@ -27,6 +27,7 @@ class TargetInfo extends Component{
 		var newRevenues = document.getElementById('changeRevenues').value;
 		var newExpenses = document.getElementById('changeExpenses').value;
 		var statusChoice = document.getElementById('status');
+		var newNotes = document.getElementById('changeNotes').value;
 		console.log(statusChoice);
 		var status = statusChoice.options[statusChoice.selectedIndex].value;
 		var targetId = this.props.targetInfo.targetId;
@@ -54,6 +55,9 @@ class TargetInfo extends Component{
 		if(newNetIncome === ''){
 			newNetIncome = this.props.targetInfo.netIncome;
 		}
+		if(newNotes === ''){
+			newNotes = this.props.targetInfo.notes;
+		}
 		var newNetIncome = newRevenues - newExpenses;
 		const formData = {
 			companyInterested,
@@ -66,7 +70,8 @@ class TargetInfo extends Component{
 			newRevenues,
 			newExpenses,
 			newNetIncome,
-			status
+			status,
+			newNotes
 		}
 		console.log(formData);
 
@@ -86,9 +91,10 @@ class TargetInfo extends Component{
 			var targetId = newProps.match.params.targetId;
 			console.log(targetId);
 			this.props.getTargetInfo(targetId);
-		}else{
-			console.log('SAME!');
 		}
+		// else{
+		// 	console.log('SAME!');
+		// }
 	}
 
 	componentDidMount(){
@@ -131,6 +137,10 @@ class TargetInfo extends Component{
 							<tr>
 								<th>Expenses:</th>
 								<td><Input id='changeExpenses' label={accounting.formatMoney(targetInfo.expenses)} /></td>
+							</tr>
+							<tr>
+								<th>Notes:</th>
+								<td><textarea id='changeNotes'>{targetInfo.notes}</textarea></td>
 							</tr>
 						</Table>
 						<Row>
@@ -177,6 +187,10 @@ class TargetInfo extends Component{
 							<tr>
 								<th>Net Income:</th>
 								<td>{accounting.formatMoney(targetInfo.netIncome)}</td>
+							</tr>
+							<tr>
+								<th>Notes:</th>
+								<td>{targetInfo.notes}</td>
 							</tr>
 						</Table>
 					</form>

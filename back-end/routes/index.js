@@ -100,10 +100,11 @@ router.post('/updateTarget', (req, res)=>{
 	const expenses = req.body.newExpenses;
 	const netIncome = req.body.newNetIncome;
 	const status = req.body.status;
+	const notes = req.body.newNotes;
 	const updateTarget = `UPDATE targets
-		SET name = ?, revenues = ?, expenses = ?, netIncome = ?, status = ?
+		SET name = ?, revenues = ?, expenses = ?, netIncome = ?, status = ?, notes = ?
 		WHERE id = ?;`;
-	connection.query(updateTarget, [newCompanyName, revenues, expenses, netIncome, status, targetId], (error)=>{
+	connection.query(updateTarget, [newCompanyName, revenues, expenses, netIncome, status, notes, targetId], (error)=>{
 		if(error){
 			throw error;
 		}else{
@@ -185,12 +186,14 @@ router.post('/addCompany', (req, res)=>{
 		if(error){
 			throw error;
 		}else{
+			console.log("INSERTED INTO TARGETS!!!!!");
 			const targetIdQuery = `SELECT * FROM targets
 										WHERE name = ?;`;
 			connection.query(targetIdQuery, [targetCompany], (error, results)=>{
 				if(error){
 					throw error;
 				}else{
+					console.log("TARGETS SELECTED!!!!!");
 					const targetId = results[0].id;
 					const insertContact = `INSERT INTO targetContacts (targetId, contactFirstName, contactLastName, contactPhone, contactEmail)
 						VALUES
@@ -199,7 +202,7 @@ router.post('/addCompany', (req, res)=>{
 						if(error){
 							throw error;
 						}else{
-
+							console.log("INSERTED INTO TARGETCONTACTS!!!!!");
 							res.json({
 								msg: 'targetInfoAdded'
 							});
@@ -295,6 +298,7 @@ router.get('/deletedTargets/:companyName/get', (req, res, next)=>{
 });
 
 router.get('/targetInfo/:targetId/get', (req, res, next)=>{
+	console.log("GETTING TARGET INFO!!");
 	const targetId = req.params.targetId;
 	const selectQuery = `SELECT * FROM targets
 		INNER JOIN targetContacts ON targetContacts.targetId = targets.id
@@ -303,6 +307,7 @@ router.get('/targetInfo/:targetId/get', (req, res, next)=>{
 		if(error){
 			throw error
 		}else{
+			console.log(results);
 			res.json(results[0]);
 		}
 	});

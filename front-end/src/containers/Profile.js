@@ -71,25 +71,29 @@ class HomePage extends Component{
 		var info = this.props.auth;
 		return(
 			<div>
-				<h6 className='errorMessage'>{this.state.error}</h6>
-				<form>
-					<Table>
-						<tr>
-							<th>Company:</th>
-							<td><Input id='profileCompanyName' defaultValue={info.company} required /></td>
-						</tr>
-						<tr>
-							<th>Name:</th>
-							<td s={2}><Input id='profileFirstName' defaultValue={info.firstName} required /></td>
-							<td><Input id='profileLastName' defaultValue={info.lastName} required /></td>
-						</tr>
-						<tr>
-							<th>Email:</th>
-							<td><Input id='profileEmail' defaultValue={info.email} type='email' validate required /></td>
-						</tr>
-					</Table>
-					<Button onClick={this.handleUpdate}>Update</Button>
-				</form>
+				<Row>
+					<Col s={6} className='offset-s3'>
+						<h6 className='errorMessage'>{this.state.error}</h6>
+						<form>
+							<Table>
+								<tr>
+									<th>Company:</th>
+									<td><Input id='profileCompanyName' defaultValue={info.company} required /></td>
+								</tr>
+								<tr>
+									<th>Name:</th>
+									<td s={2}><Input id='profileFirstName' defaultValue={info.firstName} required /></td>
+									<td><Input id='profileLastName' defaultValue={info.lastName} required /></td>
+								</tr>
+								<tr>
+									<th>Email:</th>
+									<td><Input id='profileEmail' defaultValue={info.email} type='email' validate required /></td>
+								</tr>
+							</Table>
+							<Button onClick={this.handleUpdate}>Update</Button>
+						</form>
+					</Col>
+				</Row>
 			</div>
 		)
 	}
