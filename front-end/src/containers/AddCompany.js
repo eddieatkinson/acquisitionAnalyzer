@@ -66,13 +66,13 @@ class AddCompany extends Component{
 			this.setState({
 				error: 'Please enter values for both revenue and expenses.'
 			});
-		}else if(contactFirstName === ''){
-			this.setState({
-				error: 'Please enter a contact first name.'
-			});
 		}else if(targetCompanyName === ''){
 			this.setState({
 				error: 'Please enter a company name.'
+			});
+		}else if(contactFirstName === ''){
+			this.setState({
+				error: 'Please enter a contact first name.'
 			});
 		}else{
 			const addCompanyPromise = new Promise((resolve, reject)=>{
