@@ -60,6 +60,7 @@ class HomePage extends Component{
 			});
 		}else{
 			this.props.updateProfileAction(formData);
+			this.props.history.push('/');
 		}
 	}
 

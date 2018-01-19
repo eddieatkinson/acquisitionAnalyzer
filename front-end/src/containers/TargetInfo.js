@@ -114,7 +114,7 @@ class TargetInfo extends Component{
 							</tr>
 							<tr>
 								<th>Contact Name:</th>
-								<td><Input id='changeContactFirstName' label={targetInfo.contactFirstName} /><Input id='changeContactLastName' defaultValue={targetInfo.contactLastName} /></td>
+								<td><Input id='changeContactFirstName' label={targetInfo.contactFirstName} /><Input id='changeContactLastName' label={targetInfo.contactLastName} /></td>
 							</tr>
 							<tr>
 								<th>Contact Email:</th>
@@ -145,6 +145,7 @@ class TargetInfo extends Component{
 				</div>
 			);
 		}else{
+			console.log(targetInfo);
 			return(
 				<div>
 					<form>
