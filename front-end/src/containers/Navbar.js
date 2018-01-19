@@ -24,7 +24,7 @@ class Login extends Component{
 		}
 		return(
 			<div>
-				<nav>
+				<nav className='cyan darken-2'>
 					<div className='nav-wrapper container'>
 						<Link to='/' className='brand-logo right'>Aquisition Analyzer</Link>
 						{navLinks}

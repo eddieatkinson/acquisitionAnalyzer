@@ -70,7 +70,7 @@ class Login extends Component{
 						<Input id='password' s={12} label='Password' type='password' required />
 					</Row>
 					<Row>
-						<Button onClick={this.handleSubmit}>Login</Button>
+						<Button className='cyan lighten-2' onClick={this.handleSubmit}>Login</Button>
 					</Row>
 				</form>
 					<p>Not registered? Click <Link to='/register'>here</Link> to register!</p>

@@ -142,7 +142,7 @@ class AddCompany extends Component{
 						<h5>Add Company</h5>
 						<form>
 							<Input id='tickerSymbol' label='Stock Ticker Symbol' />
-							<Button onClick={this.handleSearch}>Search</Button>
+							<Button className='cyan lighten-1' onClick={this.handleSearch}>Search</Button>
 						</form>
 						<h6 className='errorMessage'>{this.state.error}</h6>
 						<form>
@@ -167,7 +167,7 @@ class AddCompany extends Component{
 								<Input id='netIncome' s={12} label='Net Income' value={accounting.formatMoney(this.state.netIncome)} required />
 							</Row>
 							<Row>
-								<Button onClick={this.handleSubmit}>Add Company</Button>
+								<Button className='cyan lighten-1' onClick={this.handleSubmit}>Add Company</Button>
 							</Row>
 						</form>
 					</Col>

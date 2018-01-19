@@ -82,7 +82,7 @@ class Register extends Component{
 						<Input id='passwordConfirm' s={12} label='Confirm Password' type='password' required />
 					</Row>
 					<Row>
-						<Button onClick={this.handleSubmit}>Register</Button>
+						<Button className='blue lighten-1' onClick={this.handleSubmit}>Register</Button>
 					</Row>
 				</form>
 			</div>

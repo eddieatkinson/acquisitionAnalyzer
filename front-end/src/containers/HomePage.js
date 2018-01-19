@@ -95,7 +95,7 @@ class HomePage extends Component{
 			buttons = 
 			<Col s={6} className={classNameOffset}>
 			<div>
-				<Button className='top-buttons' onClick={this.showActive}>Active Targets</Button>
+				<Button className='top-buttons cyan lighten-1' onClick={this.showActive}>Active Targets</Button>
 				<h5>Companies Deleted</h5>
 			</div>
 			</Col>
@@ -103,8 +103,8 @@ class HomePage extends Component{
 			buttons = 
 			<Col s={6} className={classNameOffset}>
 			<div>
-				<Link to='/addCompany'><Button className='top-buttons'>Add Company</Button></Link>
-				<Button className='top-buttons' onClick={this.showDeleted}>Deleted Targets</Button>
+				<Link to='/addCompany'><Button className='top-buttons cyan lighten-1'>Add Company</Button></Link>
+				<Button className='top-buttons red lighten-3' onClick={this.showDeleted}>Deleted Targets</Button>
 				<h5>Companies of Interest</h5>
 			</div>
 			</Col>
@@ -115,15 +115,15 @@ class HomePage extends Component{
 					<Link to={`/info/${target.targetsId}/view`}><td>{target.name}</td></Link>
 					<td>{accounting.formatMoney(target.netIncome)}</td>
 					<td className={target.status}>{target.status}</td>
-					<td><Button onClick={this.handleReactivate} id={target.targetsId}>Reactivate</Button></td>
+					<td><Button className='cyan lighten-1' onClick={this.handleReactivate} id={target.targetsId}>Reactivate</Button></td>
 				</tr>)
 			}else{
 				return (<tr key={index}>
 					<Link to={`/info/${target.targetsId}/view`}><td>{target.name}</td></Link>
 					<td>{accounting.formatMoney(target.netIncome)}</td>
 					<td className={target.status}>{target.status}</td>
-					<td><Link to={`/info/${target.targetsId}/edit`}><Button onClick={this.props.removeOffset}>Edit</Button></Link></td>
-					<td><Button className='red' onClick={this.handleDelete} id={target.targetsId}>Delete</Button></td>
+					<td><Link to={`/info/${target.targetsId}/edit`}><Button className='cyan lighten-1' onClick={this.props.removeOffset}>Edit</Button></Link></td>
+					<td><Button className='red lighten-3' onClick={this.handleDelete} id={target.targetsId}>Delete</Button></td>
 				</tr>)
 			}
 		});

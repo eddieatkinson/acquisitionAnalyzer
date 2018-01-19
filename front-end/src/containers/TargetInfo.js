@@ -150,7 +150,7 @@ class TargetInfo extends Component{
 								<option value='approved'>Approved</option>
 							</Input>
 						</Row>
-						<Button onClick={this.handleSubmit}>Submit Changes</Button>
+						<Button className='cyan lighten-1' onClick={this.handleSubmit}>Submit Changes</Button>
 					</form>
 				</div>
 			);
