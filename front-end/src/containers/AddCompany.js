@@ -73,7 +73,7 @@ class AddCompany extends Component{
 			});
 			addCompanyPromise.then((value)=>{
 				console.log(value);
-				this.props.history.push('/');
+				this.props.history.push('/message/companyAdded');
 			});
 		}
 	}

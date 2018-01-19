@@ -81,7 +81,7 @@ class TargetInfo extends Component{
 		});
 		updateTargetPromise.then((value)=>{
 			console.log(value);
-			this.props.history.push('/');
+			this.props.history.push('/message/companyUpdated');
 		});
 	}
 

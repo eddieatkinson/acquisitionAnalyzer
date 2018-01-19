@@ -17,6 +17,7 @@ class App extends Component {
 					<div className='container-fluid'>
 						<Route exact path='/' component={HomePage} />
 						<Route path='/info' component={HomePage} />
+						<Route path='/message/:msg' component={HomePage} />
 						<Route path='/profile' component={Profile} />
 						<Row>
 							<Col s={6} className ='offset-s3'>
