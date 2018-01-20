@@ -26,7 +26,7 @@ class Login extends Component{
 			<div>
 				<nav className='cyan darken-2'>
 					<div className='nav-wrapper container'>
-						<Link to='/' className='brand-logo right'>Aquisition Analyzer</Link>
+						<Link to='/' className='brand-logo right'>Acquisition Analyzer</Link>
 						{navLinks}
 					</div>
 				</nav>

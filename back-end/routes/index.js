@@ -184,14 +184,15 @@ router.post('/addCompany', (req, res)=>{
 	const insertTarget = `INSERT INTO targets (name, companyInterested, revenues, expenses, netIncome, notes)
 		VALUES
 		(?, ?, ?, ?, ?, ?);`;
-	connection.query(insertTarget, [targetCompany, companyInterested, revenues, expenses, netIncome, notes], (error)=>{
+	connection.query(insertTarget, [targetCompany, companyInterested, revenues, expenses, netIncome, notes], (error, results)=>{
 		if(error){
 			throw error;
 		}else{
-			console.log("INSERTED INTO TARGETS!!!!!");
+			console.log("INSERTED INTO TARGETS!!!!!", results);
+			var insertId = results.insertId;
 			const targetIdQuery = `SELECT * FROM targets
-										WHERE name = ?;`;
-			connection.query(targetIdQuery, [targetCompany], (error, results)=>{
+										WHERE id = ?;`;
+			connection.query(targetIdQuery, [insertId], (error, results)=>{
 				if(error){
 					throw error;
 				}else{
@@ -329,6 +330,10 @@ router.get('/searchTicker/:tickerSymbol/get', (req, res, next)=>{
 			"Authorization": auth
 		}
 	}, (error, response, companyData)=>{
+		if(error){
+			console.log("ERROR", error);
+			// console.log(error);
+		}
 		// console.log(response);
 		var parsedCompanyData = JSON.parse(companyData);
 		console.log(parsedCompanyData.data);
